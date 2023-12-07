@@ -23,5 +23,6 @@ I don't want to bore you just open ahk script in notepad and you will find the o
 
 I suggest you create a task with admin access to run .exe file on log on in order to get the ctrl+win+j,i,k,l shortcuts to work consistantly on all windows ^_^ 
 
+I strongly recommend using Gesturesign by TransposonY along side this script they make the perfect couple, find in : https://gesturesign.win/#/ or on git hub https://github.com/TransposonY/GestureSign or in windows app store
 ............................
 if you have a suggestion or a question : nourpublicmail@gmail.com ;)
