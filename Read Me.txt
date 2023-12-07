@@ -1,0 +1,27 @@
+Hi my name is Nour
+
+I am a huge fan of autohokey 
+
+This is a script I collected and modified from different autohokey users I found online mostly on ahk forum. (Thanks to all of them, couldn't keep track of names), I posted it here to save typist and convinence seekers some time and effort finding the best way to improve their keyboard and mouse experience.
+
+The .ahk file is compiled as exe file for those who want to use directely 
+
+PS: I made this ahk with version 1 not 2 so change what you need to change 
+
+
+*****What the script does in a nutshell:
+
+makes i,j,k,l key function as arrows when caps lock is toggled ..... no need to move hands to resize windows or edit that one typo at the begining of the line 
+
+adjut brightness with mouse wheel when pointer is on edge of the screen 
+
+copy paste and cut using "m" "," "." respectively 
+
+some of these hotkey are mirrored for right had side of keyboard 
+
+I don't want to bore you just open ahk script in notepad and you will find the other little tweeks 
+
+I suggest you create a task with admin access to run .exe file on log on in order to get the ctrl+win+j,i,k,l shortcuts to work consistantly on all windows ^_^ 
+
+............................
+if you have a suggestion or a question : nourpublicmail@gmail.com ;)
