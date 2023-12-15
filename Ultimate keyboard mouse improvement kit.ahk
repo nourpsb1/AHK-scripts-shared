@@ -1,4 +1,4 @@
-﻿#Persistent
+﻿
 
 ^#j::Send,#{Left}
 
