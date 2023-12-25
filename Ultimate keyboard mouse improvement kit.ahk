@@ -1,165 +1,222 @@
-﻿
-
-^#j::Send,#{Left}
-
-^#l::Send,#{Right}
-
-^#i::Send,#{Up}
-
-^#k::Send,#{Down}
-
-+RWin::AppsKey
-+LWin::AppsKey
-
-^#.::Send,^#{Right}
-^#,::Send,^#{Left}
-!]::Send,!{Right}
-![::Send,!{Left}
-!4::Send,!{F4}
-!-::Send,{F11}
-!+-::Send,+{F11}
-!5::Send,{F5}3
-!9::Send,{F9}
-!2::Send,{F2}
-!7::Send,{F7}
-
-!\::Send,{Del} ;del key ouside of win explorer
-^\::Send,^{Del}
+#Persistent
+#InstallKeybdHook
+#InstallMouseHook
+; Key scancodes used to make hotkeys work at all languages and layouts
+; i sc017
+; k scsc025
+; l scsc026
+; j sc024
+; a sc01E
+; d sc020
+; f sc021
+; e sc012
+; s sc01F
+; m sc032
+; , sc033
+; . sc034
+; v sc02F
+; c sc02E
+; x sc02d
+; [ sc01A
+; ] sc01B
 
 
+$^#sc024::send,#{Left}
 
-#IfWinActive ahk_exe Explorer.EXE 		;work around to activate Del key while win explorer window is active (desktop included)
-!\::Send, {AppsKey} d 
-!+\::Send, +{AppsKey} d
+$^#sc026::send,#{Right}
+
+$^#sc017::send,#{Up}
+
+$^#sc025::send,#{Down}
+
+$+RWin::AppsKey
+$+LWin::AppsKey
+
+$^#.::send,^#{Right}
+$^#,::send,^#{Left}
+
+
+$!sc01A::!Left
+$!sc01B::!Right
+$!4::!F4
+$!-::F11
+$!+-::+F11
+$!5::F5
+$!9::F9
+$!2::F2
+$!7::F7
+
+;sc02B is \ in english and à in french candian layout legacy
+$!sc02B::send,{Del}
+$^sc02B::send,^{Del}
+$<^>!sc02B::send,{Del}
+
+
+
+;Bonus keep window on tap :::
+
+^+space::
+	WinGetTitle, activeWindow, A
+	if IsWindowAlwaysOnTop(activeWindow) {
+		notificationMessage := "The window """ . activeWindow . """ is now always on top."
+		notificationIcon := 16 + 1 ; No notification sound (16) + Info icon (1)
+	}
+	else {
+		notificationMessage := "The window """ . activeWindow . """ is no longer always on top."
+		notificationIcon := 16 + 2 ; No notification sound (16) + Warning icon (2)
+	}
+	Winset, Alwaysontop, , A
+	TrayTip, Always-on-top, %notificationMessage%, , %notificationIcon% 
+	Sleep 3000 ; Let it display for 3 seconds.
+	HideTrayTip()
+
+	IsWindowAlwaysOnTop(windowTitle) {
+		WinGet, windowStyle, ExStyle, %windowTitle%
+		isWindowAlwaysOnTop := if (windowStyle & 0x8) ? false : true ; 0x8 is WS_EX_TOPMOST.
+		return isWindowAlwaysOnTop
+	}
+
+	HideTrayTip() {
+		TrayTip  ; Attempt to hide it the normal way.
+		if SubStr(A_OSVersion,1,3) = "10." {
+			Menu Tray, NoIcon
+			Sleep 200  ; It may be necessary to adjust this sleep.
+			Menu Tray, Icon
+		}
+	}
+Return
+
+
+;work around to activate Del key while win explorer window is active (desktop included)
+
+#IfWinActive ahk_exe Explorer.EXE 	
+$!\::Send, {AppsKey} d
+$!+\::Send, +{AppsKey} d
 #IfWinActive
 
 #IfWinActive ahk_exe PDFXEdit.exe
-+Enter::Send,{Left}
+$+Enter::send,^{Left}
+$!tab::+!tab
 #IfWinActive
-
+#MaxHotkeysPerInterval 200
 CoordMode Mouse, Screen
+;precise brightness control 
 
 $WheelUp::
 mouseGetPos,x
 if (x >= A_ScreenWidth - 1) 
-
 	Run nircmd.exe changebrightness +3
 
 else
-  Send {WheelUp}
+$WheelUp::WheelUp
 Return
-
-
 $WheelDown::
 mouseGetPos,x
-
 if (x >= A_ScreenWidth - 1)
-  
 	Run nircmd.exe changebrightness -3
+else
+  $WheelDown::WheelDown
+Return
+
+;Fast brightness control
+
+$+WheelUp::
+mouseGetPos,x
+if (x >= A_ScreenWidth - 1) 
+	Run nircmd.exe changebrightness +12
 
 else
-  Send {WheelDown}
+ $+WheelUp::+WheelUp
 Return
 
 
-
-#NoEnv  ; Recommended for performance and compatibility with future AutoHotkey releases.
-SendMode Input  ; Recommended for new scripts due to its superior speed and reliability.
-SetWorkingDir %A_ScriptDir%
+$+WheelDown::
+mouseGetPos,x
+if (x >= A_ScreenWidth - 1)
+		Run nircmd.exe changebrightness -12
+else
+  $+WheelDown::+WheelDown
+Return
  
-;Here are the toggle for Caps Lock State - I put in a second one (Alt + /) that I can activate with just my right hand.
-;I toggle the CapsLockState also so that the light on CapsLock will indicate when it is on or off.
-
-;Additional keys not depended on caps toggle
-
-
-
-
-
-CapsLock::
- if (toggle=1) {
-  toggle=0
-  SetCapsLockState, Off
- }
- else {
-  toggle=1
-  SetCapsLockState, On
- }
-Return
-
-!/::
- if (toggle=1) {
-  toggle=0
-  SetCapsLockState, Off
- }
- else {
-  toggle=1
-  SetCapsLockState, On
- }
+ ;Sound control
+ 
+$!WheelUp::
+mouseGetPos,x
+if (x >= A_ScreenWidth - 1) 
+	SoundSet, +5
+else
+  $!WheelUp::!WheelUp
 Return
 
 
-#If (toggle=1)
-
-;Righ hand side 
-
-m::^c
-,::^v
-.::^x
-!.::!.
-
-i::Send,{Up}
-+i::Send,+{Up}					
-!^i::Send,^{Home}
-!+^i::Send,+^{Home}
-
-k::Send,{Down}				
-+k::Send,+{Down}										
-!^k::Send,^{End}
-!+i::Send,+{Home}
-!+^k::Send,+^{End}
-				
-l::Send,{Right}
-+l::Send,+{Right}
-^l::Send,^{Right}
-+^l::Send,+^{Right}
-
-j::Send,{Left}
-+j::Send,+{Left}
-^j::Send,^{Left}
-+^j::Send,+^{Left}
-
-!l::Send,{End}	
-!+l::Send,+{End}
+$!WheelDown::
+mouseGetPos,x
+if (x >= A_ScreenWidth - 1)
+	SoundSet, -5
+else
+  $!WheelDown::WheelDown
+Return
 
 
-!j::Send,{Home}
-!^j::Send,^{Home}
+;Main function of script 
 
-;Left hand side 
+#NoEnv  				; Recommended for performance and compatibility with future AutoHotkey releases.
+SendMode Input  		; Recommended for new scripts due to its superior speed and reliability.
+SetWorkingDir %A_ScriptDir%
+  
+;Do not move the following hotkey it needs SendMode Input to work !!!!
+  
+$<^>!7::send,{{} ; sends "{" whehn AltGr (in french keyboard) is pressed with 7 [canadian legacyla]
+ 
+$!/::capslock ;tooggle caps with righthand
 
+ #if (GetKeyState("CapsLock", "T") = True) ;The # before if is neccessary for the fuction to work
+ 
+		$sc032::^c
+		$sc033::^v
+		$sc034::^x
+		$!sc034::!.
+		
+		$sc017::Up
+		$+sc017::+Up					
+		$^sc017::^Home
+		$+^sc017::+^Home
 
-Esc::Send,{BackSpace}
-a::enter
-c::^c
-v::^v
-x::^x
+		$sc025::Down				
+		$+sc025::+Down										
+		$^sc025::^End
+		$+^sc025::+^End
+						
+		$sc026::Right
+		$+sc026::+Right
+		$^sc026::^Right
+		$+^sc026::+^Right
+		$!sc026::End	
+		$!+sc026::+End
 
-e::Send,^{Home}
+		$sc024::Left
+		$+sc024::+Left
+		$^sc024::^Left
+		$+^sc024::+^Left
+		$!sc024::Home
+		$!+sc024::+Home
+		
 
+		;Left hand side 
+		
 
-d::Send,^{End}
-
-
-f::Send,{Right}
-s::Send,{Left}
-
-
-
-
-
+		$sc01E::enter
+		$sc02E::^c
+		$sc02F::^v
+		$sc02D::^x
 	
-
-
-
-
+		$sc012::^Home
+		$sc020::^End
+		$sc021::Right
+		$sc01F::Left
+		
+		
+		
+		
+	
+		$Esc::BackSpace 	 	
