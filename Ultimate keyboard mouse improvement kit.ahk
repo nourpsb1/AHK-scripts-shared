@@ -1,5 +1,5 @@
 #Persistent
-#InstallKeybdHook
+
 
 ; Key scancodes used to make hotkeys work at all languages and layouts
 ; i sc017
