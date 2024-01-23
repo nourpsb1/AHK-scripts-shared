@@ -1,5 +1,5 @@
 #Persistent 
-
+;change the path below to any png file you want to us as tray icon
 Menu, Tray, Icon, C:\Users\Nour El Yakine\Desktop\‎ ‎ ‎ ‎‎ ‎ ‎ ‎‎ ‎ ‎ ‎‎ ‎ ‎ ‎\theme collection\icons+JPG\keyboard-512.ico ;changes default green icon to red keyboard in taskbar tray 
 
 
